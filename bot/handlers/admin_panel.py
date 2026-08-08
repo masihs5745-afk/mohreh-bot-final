@@ -1,8 +1,8 @@
 from aiogram import Router
-from aiogram.types import Message
 from aiogram.filters import Command
 from aiogram.fsm.context import FSMContext
 from aiogram.fsm.state import State, StatesGroup
+from aiogram.types import Message
 
 from bot.config import ADMIN_ID
 from bot.database.database import (
@@ -29,9 +29,9 @@ async def admin_panel(message: Message):
 
     await message.answer(
         "👨‍💻 پنل مدیریت\n\n"
-        f"👥 کاربران: {users}\n"
-        f"📦 سفارش‌ها: {orders}\n\n"
-        "برای ارسال همگانی دستور زیر را بزن:\n"
+        f"👥 تعداد کاربران: {users}\n"
+        f"📦 تعداد سفارش‌ها: {orders}\n\n"
+        "📢 برای ارسال پیام همگانی:\n"
         "/broadcast"
     )
 
@@ -45,7 +45,8 @@ async def broadcast_start(
         return
 
     await message.answer(
-        "📢 متن پیام همگانی را ارسال کن:"
+        "📢 پیام همگانی خود را ارسال کنید.\n\n"
+        "برای لغو بنویسید: لغو"
     )
 
     await state.set_state(BroadcastState.message)
@@ -59,15 +60,24 @@ async def send_broadcast(
     if message.from_user.id != ADMIN_ID:
         return
 
+    if message.text == "لغو":
+        await state.clear()
+
+        await message.answer(
+            "❌ ارسال همگانی لغو شد."
+        )
+        return
+
     if not message.text:
         await message.answer(
-            "❌ فقط پیام متنی ارسال کن."
+            "❌ لطفاً یک پیام متنی ارسال کنید."
         )
         return
 
     users = await get_all_users()
 
-    count = 0
+    success = 0
+    failed = 0
 
     for user_id in users:
         try:
@@ -75,13 +85,15 @@ async def send_broadcast(
                 user_id,
                 message.text,
             )
-            count += 1
+            success += 1
 
         except Exception:
-            pass
-
-    await message.answer(
-        f"✅ پیام برای {count} کاربر ارسال شد."
-    )
+            failed += 1
 
     await state.clear()
+
+    await message.answer(
+        "📢 ارسال همگانی انجام شد.\n\n"
+        f"✅ موفق: {success}\n"
+        f"❌ ناموفق: {failed}"
+    )
