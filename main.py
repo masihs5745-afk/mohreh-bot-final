@@ -18,12 +18,17 @@ from bot.database.support import create_support_table
 
 
 # =========================
-# PythonAnywhere Proxy
+# Telegram Proxy
 # =========================
 
 session = AiohttpSession(
     proxy="http://proxy.server:3128"
 )
+
+
+# =========================
+# Bot
+# =========================
 
 bot = Bot(
     token=BOT_TOKEN,
@@ -52,7 +57,10 @@ dp.include_router(info_router)
 
 async def main():
 
+    # ساخت دیتابیس اصلی
     await create_db()
+
+    # ساخت جدول پیام‌های پشتیبانی
     await create_support_table()
 
     print("Bot is starting...")
