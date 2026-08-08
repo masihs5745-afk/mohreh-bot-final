@@ -1,19 +1,20 @@
 from aiogram.types import InlineKeyboardMarkup, InlineKeyboardButton
 
 
-channel_keyboard = InlineKeyboardMarkup(
-    inline_keyboard=[
-        [
-            InlineKeyboardButton(
-                text="📢 عضویت در کانال",
-                url="https://t.me/mohrehmarradobargh"
-            )
-        ],
-        [
-            InlineKeyboardButton(
-                text="✅ بررسی عضویت",
-                callback_data="check_join"
-            )
+def channel_keyboard(channel_url: str) -> InlineKeyboardMarkup:
+    return InlineKeyboardMarkup(
+        inline_keyboard=[
+            [
+                InlineKeyboardButton(
+                    text="📢 عضویت در کانال",
+                    url=channel_url,
+                )
+            ],
+            [
+                InlineKeyboardButton(
+                    text="✅ بررسی عضویت",
+                    callback_data="check_membership",
+                )
+            ],
         ]
-    ]
-)
+    )
