@@ -90,3 +90,18 @@ async def get_all_users():
         users = await cursor.fetchall()
 
         return [user[0] for user in users]
+        async def get_user_orders(user_id: int):
+    async with aiosqlite.connect(DB_NAME) as db:
+        cursor = await db.execute(
+            """
+            SELECT id, name, phone, description
+            FROM orders
+            WHERE user_id = ?
+            ORDER BY id DESC
+            """,
+            (user_id,)
+        )
+
+        orders = await cursor.fetchall()
+
+        return orders
