@@ -17,7 +17,7 @@ async def create_db():
 
         await db.execute("""
         CREATE TABLE IF NOT EXISTS orders (
-            id INTEGER PRIMARY KEY,
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
             user_id INTEGER,
             name TEXT,
             phone TEXT,
@@ -28,7 +28,11 @@ async def create_db():
         await db.commit()
 
 
-async def add_user(user_id: int, full_name: str, username: str):
+async def add_user(
+    user_id: int,
+    full_name: str,
+    username: str
+):
     async with aiosqlite.connect(DB_NAME) as db:
         await db.execute(
             """
@@ -68,6 +72,7 @@ async def get_users_count():
         )
 
         result = await cursor.fetchone()
+
         return result[0]
 
 
@@ -78,6 +83,7 @@ async def get_orders_count():
         )
 
         result = await cursor.fetchone()
+
         return result[0]
 
 
@@ -90,7 +96,9 @@ async def get_all_users():
         users = await cursor.fetchall()
 
         return [user[0] for user in users]
-        async def get_user_orders(user_id: int):
+
+
+async def get_user_orders(user_id: int):
     async with aiosqlite.connect(DB_NAME) as db:
         cursor = await db.execute(
             """
