@@ -3,7 +3,6 @@ from aiogram import Router
 from aiogram.filters import CommandStart
 from aiogram.types import Message
 
-from bot.config import BOT_TOKEN
 from bot.database.database import add_user
 from bot.keyboards.main_menu import main_menu
 
