@@ -4,7 +4,6 @@ import asyncio
 from aiogram import Bot, Dispatcher
 
 from bot.config import BOT_TOKEN
-
 from bot.handlers.start import router as start_router
 from bot.handlers.order import router as order_router
 from bot.handlers.support import router as support_router
