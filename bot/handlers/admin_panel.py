@@ -5,7 +5,11 @@ from aiogram.fsm.context import FSMContext
 from aiogram.fsm.state import State, StatesGroup
 
 from bot.config import ADMIN_ID
-from bot.database.database import get_users_count, get_orders_count, get_all_users
+from bot.database.database import (
+    get_users_count,
+    get_orders_count,
+    get_all_users,
+)
 
 
 router = Router()
@@ -33,7 +37,10 @@ async def admin_panel(message: Message):
 
 
 @router.message(Command("broadcast"))
-async def broadcast_start(message: Message, state: FSMContext):
+async def broadcast_start(
+    message: Message,
+    state: FSMContext,
+):
     if message.from_user.id != ADMIN_ID:
         return
 
@@ -45,8 +52,17 @@ async def broadcast_start(message: Message, state: FSMContext):
 
 
 @router.message(BroadcastState.message)
-async def send_broadcast(message: Message, state: FSMContext):
+async def send_broadcast(
+    message: Message,
+    state: FSMContext,
+):
     if message.from_user.id != ADMIN_ID:
+        return
+
+    if not message.text:
+        await message.answer(
+            "❌ فقط پیام متنی ارسال کن."
+        )
         return
 
     users = await get_all_users()
@@ -57,7 +73,7 @@ async def send_broadcast(message: Message, state: FSMContext):
         try:
             await message.bot.send_message(
                 user_id,
-                message.text
+                message.text,
             )
             count += 1
 
