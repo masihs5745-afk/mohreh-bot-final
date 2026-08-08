@@ -1,9 +1,7 @@
 import asyncio
-import os
-from http.server import BaseHTTPRequestHandler, HTTPServer
-from threading import Thread
 
 from aiogram import Bot, Dispatcher
+from aiogram.client.session.aiohttp import AiohttpSession
 
 from bot.config import BOT_TOKEN
 
@@ -20,40 +18,16 @@ from bot.database.support import create_support_table
 
 
 # =========================
-# Render Health Check Server
+# PythonAnywhere Proxy
 # =========================
 
-class HealthHandler(BaseHTTPRequestHandler):
-
-    def do_GET(self):
-        self.send_response(200)
-        self.send_header("Content-Type", "text/plain")
-        self.end_headers()
-        self.wfile.write(b"OK")
-
-    def log_message(self, format, *args):
-        return
-
-
-def start_health_server():
-    port = int(os.getenv("PORT", "10000"))
-
-    server = HTTPServer(
-        ("0.0.0.0", port),
-        HealthHandler
-    )
-
-    print(f"Health server running on port {port}")
-
-    server.serve_forever()
-
-
-# =========================
-# Bot
-# =========================
+session = AiohttpSession(
+    proxy="http://proxy.server:3128"
+)
 
 bot = Bot(
-    token=BOT_TOKEN
+    token=BOT_TOKEN,
+    session=session
 )
 
 dp = Dispatcher()
@@ -78,48 +52,13 @@ dp.include_router(info_router)
 
 async def main():
 
-    if not BOT_TOKEN:
-        raise RuntimeError(
-            "BOT_TOKEN is not set!"
-        )
-
-    # ساخت دیتابیس اصلی
     await create_db()
-
-    # ساخت جدول پشتیبانی
     await create_support_table()
-
-    print("Database initialized.")
-
-    # اجرای HTTP server برای Render
-    health_thread = Thread(
-        target=start_health_server,
-        daemon=True
-    )
-
-    health_thread.start()
 
     print("Bot is starting...")
 
-    try:
+    await dp.start_polling(bot)
 
-        await dp.start_polling(
-            bot,
-            allowed_updates=dp.resolve_used_update_types()
-        )
-
-    finally:
-
-        await bot.session.close()
-
-
-# =========================
-# Run
-# =========================
 
 if __name__ == "__main__":
-    try:
-        asyncio.run(main())
-
-    except KeyboardInterrupt:
-        print("Bot stopped.")
+    asyncio.run(main())
