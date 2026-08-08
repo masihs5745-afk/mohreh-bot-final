@@ -2,7 +2,7 @@ from aiogram import Router, F
 from aiogram.types import Message
 from aiogram.fsm.context import FSMContext
 
-from bot.utils.states import OrderStates
+from bot.utils.states import OrderState
 from bot.database.database import add_order
 from bot.config import ADMIN_ID
 
@@ -25,12 +25,11 @@ async def order_start(message: Message, state: FSMContext):
         "برای لغو سفارش بنویسید: لغو"
     )
 
-    await state.set_state(OrderStates.name)
+    await state.set_state(OrderState.name)
 
 
-@router.message(OrderStates.name)
+@router.message(OrderState.name)
 async def get_name(message: Message, state: FSMContext):
-
     if message.text == "لغو":
         await cancel_order(message, state)
         return
@@ -42,12 +41,11 @@ async def get_name(message: Message, state: FSMContext):
         "برای لغو سفارش بنویسید: لغو"
     )
 
-    await state.set_state(OrderStates.phone)
+    await state.set_state(OrderState.phone)
 
 
-@router.message(OrderStates.phone)
+@router.message(OrderState.phone)
 async def get_phone(message: Message, state: FSMContext):
-
     if message.text == "لغو":
         await cancel_order(message, state)
         return
@@ -59,12 +57,11 @@ async def get_phone(message: Message, state: FSMContext):
         "برای لغو سفارش بنویسید: لغو"
     )
 
-    await state.set_state(OrderStates.description)
+    await state.set_state(OrderState.description)
 
 
-@router.message(OrderStates.description)
+@router.message(OrderState.description)
 async def get_description(message: Message, state: FSMContext):
-
     if message.text == "لغو":
         await cancel_order(message, state)
         return
@@ -82,12 +79,11 @@ async def get_description(message: Message, state: FSMContext):
         "برای لغو بنویسید: لغو"
     )
 
-    await state.set_state(OrderStates.confirm)
+    await state.set_state(OrderState.confirm)
 
 
-@router.message(OrderStates.confirm)
+@router.message(OrderState.confirm)
 async def confirm_order(message: Message, state: FSMContext):
-
     if message.text == "لغو":
         await cancel_order(message, state)
         return
