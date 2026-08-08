@@ -11,7 +11,10 @@ def main_menu() -> ReplyKeyboardMarkup:
             ],
             [
                 KeyboardButton(text="📞 پشتیبانی"),
-                KeyboardButton(text="ℹ️ اطلاعات"),
+                KeyboardButton(text="ℹ️ درباره ما"),
+            ],
+            [
+                KeyboardButton(text="📋 قوانین"),
             ],
         ],
         resize_keyboard=True,
