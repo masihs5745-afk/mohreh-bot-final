@@ -1,13 +1,12 @@
 
-from aiogram import Router
+from aiogram import Router, F
 from aiogram.types import Message
-from aiogram.filters import Text
 
 
 router = Router()
 
 
-@router.message(Text("ℹ️ درباره ما"))
+@router.message(F.text == "ℹ️ درباره ما")
 async def about_handler(message: Message):
     await message.answer(
         "ℹ️ درباره ما\n\n"
@@ -15,7 +14,7 @@ async def about_handler(message: Message):
     )
 
 
-@router.message(Text("📋 قوانین"))
+@router.message(F.text == "📋 قوانین")
 async def rules_handler(message: Message):
     await message.answer(
         "📋 قوانین:\n\n"
