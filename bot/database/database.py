@@ -17,7 +17,7 @@ async def create_db():
 
         await db.execute("""
         CREATE TABLE IF NOT EXISTS orders (
-            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            id INTEGER PRIMARY KEY,
             user_id INTEGER,
             name TEXT,
             phone TEXT,
@@ -72,7 +72,6 @@ async def get_users_count():
         )
 
         result = await cursor.fetchone()
-
         return result[0]
 
 
@@ -83,7 +82,6 @@ async def get_orders_count():
         )
 
         result = await cursor.fetchone()
-
         return result[0]
 
 
