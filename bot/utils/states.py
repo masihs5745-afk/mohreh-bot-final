@@ -1,7 +1,7 @@
 from aiogram.fsm.state import State, StatesGroup
 
 
-class OrderStates(StatesGroup):
+class OrderState(StatesGroup):
     name = State()
     phone = State()
     description = State()
