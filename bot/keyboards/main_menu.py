@@ -2,16 +2,17 @@
 from aiogram.types import ReplyKeyboardMarkup, KeyboardButton
 
 
-main_menu = ReplyKeyboardMarkup(
-    keyboard=[
-        [
-            KeyboardButton(text="🛒 ثبت سفارش"),
-            KeyboardButton(text="📞 پشتیبانی")
+def main_menu() -> ReplyKeyboardMarkup:
+    return ReplyKeyboardMarkup(
+        keyboard=[
+            [
+                KeyboardButton(text="🛒 ثبت سفارش"),
+                KeyboardButton(text="📦 سفارش‌های من"),
+            ],
+            [
+                KeyboardButton(text="📞 پشتیبانی"),
+                KeyboardButton(text="ℹ️ اطلاعات"),
+            ],
         ],
-        [
-            KeyboardButton(text="ℹ️ درباره ما"),
-            KeyboardButton(text="📋 قوانین")
-        ]
-    ],
-    resize_keyboard=True
-)
+        resize_keyboard=True,
+    )
