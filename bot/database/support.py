@@ -34,7 +34,7 @@ async def save_support_message(
         await db.commit()
 
 
-async def get_user_by_support_message(
+async def get_user_by_message(
     message_id: int
 ):
     async with aiosqlite.connect(DB_NAME) as db:
