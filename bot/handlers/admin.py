@@ -2,7 +2,7 @@ from aiogram import Router
 from aiogram.types import Message
 
 from bot.config import ADMIN_ID
-from bot.database.support import get_user_by_support_message
+from bot.database.support import get_user_by_message
 
 
 router = Router()
@@ -16,7 +16,10 @@ async def admin_reply(message: Message):
     if not message.reply_to_message:
         return
 
-    user_id = await get_user_by_support_message(
+    if not message.text:
+        return
+
+    user_id = await get_user_by_message(
         message.reply_to_message.message_id
     )
 
